@@ -1,0 +1,26 @@
+{
+  "name": "gesture-me-this",
+  "version": "1.0.0",
+  "description": "Your friendly neighbourhood gesture library",
+  "files": ["/dist"],
+  "main": "./dist/gesture-me-this.umd.js",
+  "module": "./dist/gesture-me-this.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/gesture-me-this.es.js",
+      "require": "./dist/gesture-me-this.umd.js"
+    }
+  },
+  "scripts": {
+    "serve": "vite",
+    "build": "vite build; npx tsc",
+    "preview": "vite preview"
+  },
+  "author": "rope-hmg <rope.hmg@protonmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "hammer-touchemulator": "^0.0.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
+  }
+}

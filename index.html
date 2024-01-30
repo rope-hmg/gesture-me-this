@@ -1,0 +1,108 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+
+        <!-- <script src="./node_modules/hammer-touchemulator/touch-emulator.js"></script> -->
+
+        <title>Gesture Me This</title>
+
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            canvas {
+                width: 100vw;
+                height: 100vh;
+                background-color: #000;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script type="module">
+            import {
+                GestureController,
+                EventType,
+                pinch_zoom,
+            } from "./src/lib.ts";
+            import TouchEmulator from "hammer-touchemulator";
+
+            TouchEmulator.template = () => "";
+            TouchEmulator.multiTouchOffset = 0;
+            TouchEmulator();
+
+            const touchBubbleRadius = 10;
+
+            const canvas = document.getElementById("canvas");
+            const context = canvas.getContext("2d");
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            context.fillStyle = "green";
+            context.strokeStyle = "yellow";
+
+            const controller = new GestureController(canvas);
+            controller.add_listener(EventType.Move, (metrics) => {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (metrics.centroid.x !== 0 || metrics.centroid.y !== 0) {
+                    context.beginPath();
+                    context.arc(
+                        metrics.centroid.x,
+                        metrics.centroid.y,
+                        touchBubbleRadius,
+                        0,
+                        2 * Math.PI,
+                    );
+                    context.closePath();
+                    context.fill();
+                }
+
+                const p = pinch_zoom(metrics);
+                if (p.is_recognised) {
+                    context.strokeStyle = "red";
+                } else {
+                    context.strokeStyle = "yellow";
+                }
+
+                for (const finger of metrics.fingers.values()) {
+                    context.beginPath();
+                    context.arc(
+                        finger.position.x,
+                        finger.position.y,
+                        touchBubbleRadius,
+                        0,
+                        2 * Math.PI,
+                    );
+                    context.closePath();
+                    context.stroke();
+
+                    context.beginPath();
+                    context.moveTo(finger.position.x, finger.position.y);
+                    context.lineTo(
+                        finger.position.x + finger.position_delta.x,
+                        finger.position.y + finger.position_delta.y,
+                    );
+                    context.closePath();
+                    context.stroke();
+
+                    context.beginPath();
+                    context.moveTo(finger.position.x, finger.position.y);
+                    context.lineTo(
+                        finger.position.x + finger.centroid_direction.x,
+                        finger.position.y + finger.centroid_direction.y,
+                    );
+                    context.closePath();
+                    context.stroke();
+                }
+            });
+        </script>
+
+        <canvas id="canvas"> </canvas>
+    </body>
+</html>
