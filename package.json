@@ -5,6 +5,7 @@
   "files": ["/dist"],
   "main": "./dist/gesture-me-this.umd.js",
   "module": "./dist/gesture-me-this.es.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/gesture-me-this.es.js",
