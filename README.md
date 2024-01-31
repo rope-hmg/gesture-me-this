@@ -3,8 +3,8 @@
 A tiny multitouch gesture library for the browser.
 
 ```
-dist/gesture-me-this.es.js   5.93 kB │ gzip: 1.67 kB │ map: 18.02 kB
-dist/gesture-me-this.umd.js  4.32 kB │ gzip: 1.47 kB │ map: 17.44 kB
+dist/gesture-me-this.es.js   5.93 kB │ gzip: 1.67 kB │ map: 17.99 kB
+dist/gesture-me-this.umd.js  4.32 kB │ gzip: 1.47 kB │ map: 17.41 kB
 ```
 
 # Gestures

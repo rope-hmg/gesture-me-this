@@ -7,13 +7,13 @@ export type PinchMetrics = {
     /**
      * The strength of the pinch. The value indicates the average travel distance of all the fingers.
      */
-    strength: number;
+    readonly strength: number;
     /**
      * The direction of the pinch.
      * - `PinchDirection.Inward` if the fingers are moving towards each other.
      * - `PinchDirection.Outward` if the fingers are moving away from each other.
      */
-    direction: PinchDirection;
+    readonly direction: PinchDirection;
 };
 /**
  * Recognises a pinchZoom gesture.

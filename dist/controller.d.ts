@@ -14,7 +14,7 @@ export declare class GestureController {
     private on_move;
     private on_end;
     private on_cancel;
-    private constructor();
+    constructor(element: HTMLElement, listeners: Map<EventType, TouchHandler[]>);
     /** Removes the touch event listeners from the element */
     disableGestures(): void;
     private run_user_handlers;
