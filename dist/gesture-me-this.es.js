@@ -87,21 +87,21 @@ class m {
 }
 var v = /* @__PURE__ */ ((e) => (e[e.OnStart = 0] = "OnStart", e[e.OnMove = 1] = "OnMove", e[e.OnEnd = 2] = "OnEnd", e[e.OnCancel = 3] = "OnCancel", e))(v || {});
 class p {
-  constructor(t, s) {
-    this.element = t, this.listeners = s, this.metrics = new f();
-    const i = (n) => {
+  constructor(t, s, i) {
+    this.element = t, this.listeners = s, this.user_data = i, this.metrics = new f();
+    const r = (n) => {
       n.preventDefault(), this.initialise_touches(n.changedTouches), this.run_user_handlers(
         n,
         0
         /* OnStart */
       );
-    }, r = (n) => {
+    }, c = (n) => {
       n.preventDefault(), this.update_touches(n.changedTouches), this.run_user_handlers(
         n,
         1
         /* OnMove */
       );
-    }, c = (n) => {
+    }, a = (n) => {
       n.preventDefault(), this.remove_touches(n.changedTouches), this.run_user_handlers(
         n,
         2
@@ -114,7 +114,7 @@ class p {
         /* OnCancel */
       );
     };
-    t.addEventListener("touchstart", i), t.addEventListener("touchmove", r), t.addEventListener("touchend", c), t.addEventListener("touchcancel", h), this.on_start = i, this.on_move = r, this.on_end = c, this.on_cancel = h;
+    t.addEventListener("touchstart", r), t.addEventListener("touchmove", c), t.addEventListener("touchend", a), t.addEventListener("touchcancel", h), this.on_start = r, this.on_move = c, this.on_end = a, this.on_cancel = h;
   }
   /** Removes the touch event listeners from the element */
   disableGestures() {
@@ -124,7 +124,7 @@ class p {
     const i = this.listeners.get(s);
     if (i)
       for (const r of i)
-        r(this.metrics, t);
+        r(this.metrics, t, this.user_data);
   }
   initialise_touches(t) {
     this.metrics.finger_count += t.length;
@@ -170,16 +170,16 @@ const x = {
   const { exact_finger_count: s, sensitivity: i = 0.5 } = t ?? x, r = !!s && e.finger_count === s || !s && e.finger_count > 1;
   let c;
   if (r) {
-    const h = e.fingers.values();
-    let { value: n, done: _ } = h.next(), l = n.is_moving_toward_centroid(), u = !0;
-    for (; !_ && u; )
-      u = l === n.is_moving_toward_centroid(), { value: n, done: _ } = h.next();
-    if (u) {
+    const a = e.fingers.values();
+    let { value: h, done: n } = a.next(), l = h.is_moving_toward_centroid(), _ = !0;
+    for (; !n && _; )
+      _ = l === h.is_moving_toward_centroid(), { value: h, done: n } = a.next();
+    if (_) {
       const d = l ? 0 : 1;
-      let a = 0;
+      let u = 0;
       for (const g of e.fingers.values())
-        a += g.position_delta.length();
-      a /= e.finger_count, a *= i, c = { strength: a, direction: d };
+        u += g.position_delta.length();
+      u /= e.finger_count, u *= i, c = { strength: u, direction: d };
     }
   }
   return c ? { is_recognised: !0, metrics: c } : { is_recognised: !1 };

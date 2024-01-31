@@ -5,16 +5,17 @@ export declare enum EventType {
     OnEnd = 2,
     OnCancel = 3
 }
-export type TouchHandler = (metrics: ReadonlyMetrics, event: TouchEvent) => void;
-export declare class GestureController {
+export type TouchHandler<T> = (metrics: ReadonlyMetrics, event: TouchEvent, user_data?: T) => void;
+export declare class GestureController<T> {
     private element;
     private listeners;
+    private user_data?;
     private metrics;
     private on_start;
     private on_move;
     private on_end;
     private on_cancel;
-    constructor(element: HTMLElement, listeners: Map<EventType, TouchHandler[]>);
+    constructor(element: HTMLElement, listeners: Map<EventType, TouchHandler<T>[]>, user_data?: T | undefined);
     /** Removes the touch event listeners from the element */
     disableGestures(): void;
     private run_user_handlers;

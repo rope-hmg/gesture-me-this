@@ -8,14 +8,15 @@ export enum EventType {
   OnCancel,
 }
 
-export type TouchHandler = (
+export type TouchHandler<T> = (
   metrics: ReadonlyMetrics,
   event: TouchEvent,
+  user_data?: T,
 ) => void;
 
 type InternalTouchEventHandler = (event: TouchEvent) => void;
 
-export class GestureController {
+export class GestureController<T> {
   private metrics = new Metrics();
 
   private on_start: InternalTouchEventHandler;
@@ -25,7 +26,8 @@ export class GestureController {
 
   constructor(
     private element: HTMLElement,
-    private listeners: Map<EventType, TouchHandler[]>,
+    private listeners: Map<EventType, TouchHandler<T>[]>,
+    private user_data?: T,
   ) {
     const on_start: InternalTouchEventHandler = (event) => {
       event.preventDefault();
@@ -75,7 +77,7 @@ export class GestureController {
 
     if (handlers) {
       for (const handler of handlers) {
-        handler(this.metrics, event);
+        handler(this.metrics, event, this.user_data);
       }
     }
   }
