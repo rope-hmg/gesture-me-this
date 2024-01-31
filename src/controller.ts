@@ -1,22 +1,21 @@
 import { Metrics, ReadonlyMetrics } from "./metrics";
 import { Finger } from "./finger";
 
-export enum EventType {
-  OnStart,
-  OnMove,
-  OnEnd,
-  OnCancel,
-}
-
-export type TouchHandler<T> = (
+export type TouchHandler = (
   metrics: ReadonlyMetrics,
   event: TouchEvent,
-  user_data?: T,
 ) => void;
+
+export type TouchHandlers = {
+  on_start?: TouchHandler;
+  on_move?: TouchHandler;
+  on_end?: TouchHandler;
+  on_cancel?: TouchHandler;
+};
 
 type InternalTouchEventHandler = (event: TouchEvent) => void;
 
-export class GestureController<T> {
+export class GestureController {
   private metrics = new Metrics();
 
   private on_start: InternalTouchEventHandler;
@@ -26,31 +25,31 @@ export class GestureController<T> {
 
   constructor(
     private element: HTMLElement,
-    private listeners: Map<EventType, TouchHandler<T>[]>,
-    private user_data?: T,
+
+    handlers: TouchHandlers,
   ) {
     const on_start: InternalTouchEventHandler = (event) => {
       event.preventDefault();
       this.initialise_touches(event.changedTouches);
-      this.run_user_handlers(event, EventType.OnStart);
+      handlers.on_start?.(this.metrics, event);
     };
 
     const on_move: InternalTouchEventHandler = (event) => {
       event.preventDefault();
       this.update_touches(event.changedTouches);
-      this.run_user_handlers(event, EventType.OnMove);
+      handlers.on_move?.(this.metrics, event);
     };
 
     const on_end: InternalTouchEventHandler = (event) => {
       event.preventDefault();
       this.remove_touches(event.changedTouches);
-      this.run_user_handlers(event, EventType.OnEnd);
+      handlers.on_end?.(this.metrics, event);
     };
 
     const on_cancel: InternalTouchEventHandler = (event) => {
       event.preventDefault();
       this.remove_all_touches();
-      this.run_user_handlers(event, EventType.OnCancel);
+      handlers.on_cancel?.(this.metrics, event);
     };
 
     element.addEventListener("touchstart", on_start);
@@ -70,16 +69,6 @@ export class GestureController<T> {
     this.element.removeEventListener("touchmove", this.on_move);
     this.element.removeEventListener("touchmove", this.on_end);
     this.element.removeEventListener("touchmove", this.on_cancel);
-  }
-
-  private run_user_handlers(event: TouchEvent, type: EventType): void {
-    const handlers = this.listeners.get(type);
-
-    if (handlers) {
-      for (const handler of handlers) {
-        handler(this.metrics, event, this.user_data);
-      }
-    }
   }
 
   private initialise_touches(touches: TouchList): void {

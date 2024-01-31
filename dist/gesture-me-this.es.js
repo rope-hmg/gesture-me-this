@@ -1,32 +1,32 @@
-class o {
-  constructor(t, s) {
-    this.x = t, this.y = s;
+class r {
+  constructor(t, i) {
+    this.x = t, this.y = i;
   }
-  add(t, s = new o(0, 0)) {
-    return s.x = this.x + t.x, s.y = this.y + t.y, s;
+  add(t, i = new r(0, 0)) {
+    return i.x = this.x + t.x, i.y = this.y + t.y, i;
   }
   add_assign(t) {
     return this.add(t, this);
   }
-  sub(t, s = new o(0, 0)) {
-    return s.x = this.x - t.x, s.y = this.y - t.y, s;
+  sub(t, i = new r(0, 0)) {
+    return i.x = this.x - t.x, i.y = this.y - t.y, i;
   }
   sub_assign(t) {
     return this.sub(t, this);
   }
-  mul(t, s = new o(0, 0)) {
-    return s.x = this.x * t, s.y = this.y * t, s;
+  mul(t, i = new r(0, 0)) {
+    return i.x = this.x * t, i.y = this.y * t, i;
   }
   mul_assign(t) {
     return this.mul(t, this);
   }
-  div(t, s = new o(0, 0)) {
-    return this.mul(1 / t, s);
+  div(t, i = new r(0, 0)) {
+    return this.mul(1 / t, i);
   }
   div_assign(t) {
     return this.mul_assign(1 / t);
   }
-  neg(t = new o(0, 0)) {
+  neg(t = new r(0, 0)) {
     return this.mul(-1, t);
   }
   neg_assign() {
@@ -44,7 +44,7 @@ class o {
   length() {
     return Math.sqrt(this.length_sq());
   }
-  normalise(t = new o(0, 0)) {
+  normalise(t = new r(0, 0)) {
     return this.mul(1 / this.length(), t);
   }
   normalise_assign() {
@@ -53,13 +53,13 @@ class o {
   copy_from(t) {
     return this.x = t.x, this.y = t.y, this;
   }
-  set(t, s) {
-    this.x = t, this.y = s;
+  set(t, i) {
+    this.x = t, this.y = i;
   }
 }
-class f {
+class m {
   constructor() {
-    this.finger_count = 0, this.fingers = /* @__PURE__ */ new Map(), this.centroid = new o(0, 0);
+    this.finger_count = 0, this.fingers = /* @__PURE__ */ new Map(), this.centroid = new r(0, 0);
   }
   // average_finger_direction(): Vector {
   //   const average_direction = new Vector(0, 0);
@@ -72,125 +72,105 @@ class f {
   //   return average_direction;
   // }
 }
-class m {
-  constructor(t, s) {
-    this.position_delta = new o(0, 0), this.centroid_direction = new o(0, 0), this.position = new o(t, s);
+class f {
+  constructor(t, i) {
+    this.position_delta = new r(0, 0), this.centroid_direction = new r(0, 0), this.position = new r(t, i);
   }
   is_moving_toward_centroid() {
     return this.position_delta.dot(this.centroid_direction) > 0;
   }
   /** Returns the angle around `point` that the finger moved in radians  */
   angle_delta_around_point(t) {
-    const s = this.position.sub(this.position_delta).sub_assign(t).normalise_assign(), i = this.position.sub(t).normalise_assign();
-    return Math.acos(s.dot(i));
+    const i = this.position.sub(this.position_delta).sub_assign(t).normalise_assign(), e = this.position.sub(t).normalise_assign();
+    return Math.acos(i.dot(e));
   }
 }
-var v = /* @__PURE__ */ ((e) => (e[e.OnStart = 0] = "OnStart", e[e.OnMove = 1] = "OnMove", e[e.OnEnd = 2] = "OnEnd", e[e.OnCancel = 3] = "OnCancel", e))(v || {});
-class p {
-  constructor(t, s, i) {
-    this.element = t, this.listeners = s, this.user_data = i, this.metrics = new f();
-    const r = (n) => {
-      n.preventDefault(), this.initialise_touches(n.changedTouches), this.run_user_handlers(
-        n,
-        0
-        /* OnStart */
-      );
-    }, c = (n) => {
-      n.preventDefault(), this.update_touches(n.changedTouches), this.run_user_handlers(
-        n,
-        1
-        /* OnMove */
-      );
-    }, a = (n) => {
-      n.preventDefault(), this.remove_touches(n.changedTouches), this.run_user_handlers(
-        n,
-        2
-        /* OnEnd */
-      );
-    }, h = (n) => {
-      n.preventDefault(), this.remove_all_touches(), this.run_user_handlers(
-        n,
-        3
-        /* OnCancel */
-      );
+class w {
+  constructor(t, i) {
+    this.element = t, this.metrics = new m();
+    const e = (s) => {
+      var o;
+      s.preventDefault(), this.initialise_touches(s.changedTouches), (o = i.on_start) == null || o.call(i, this.metrics, s);
+    }, c = (s) => {
+      var o;
+      s.preventDefault(), this.update_touches(s.changedTouches), (o = i.on_move) == null || o.call(i, this.metrics, s);
+    }, u = (s) => {
+      var o;
+      s.preventDefault(), this.remove_touches(s.changedTouches), (o = i.on_end) == null || o.call(i, this.metrics, s);
+    }, _ = (s) => {
+      var o;
+      s.preventDefault(), this.remove_all_touches(), (o = i.on_cancel) == null || o.call(i, this.metrics, s);
     };
-    t.addEventListener("touchstart", r), t.addEventListener("touchmove", c), t.addEventListener("touchend", a), t.addEventListener("touchcancel", h), this.on_start = r, this.on_move = c, this.on_end = a, this.on_cancel = h;
+    t.addEventListener("touchstart", e), t.addEventListener("touchmove", c), t.addEventListener("touchend", u), t.addEventListener("touchcancel", _), this.on_start = e, this.on_move = c, this.on_end = u, this.on_cancel = _;
   }
   /** Removes the touch event listeners from the element */
   disableGestures() {
     this.element.removeEventListener("touchstart", this.on_start), this.element.removeEventListener("touchmove", this.on_move), this.element.removeEventListener("touchmove", this.on_end), this.element.removeEventListener("touchmove", this.on_cancel);
   }
-  run_user_handlers(t, s) {
-    const i = this.listeners.get(s);
-    if (i)
-      for (const r of i)
-        r(this.metrics, t, this.user_data);
-  }
   initialise_touches(t) {
     this.metrics.finger_count += t.length;
-    for (const s of t) {
-      const i = new m(s.clientX, s.clientY);
-      this.metrics.fingers.set(s.identifier, i);
+    for (const i of t) {
+      const e = new f(i.clientX, i.clientY);
+      this.metrics.fingers.set(i.identifier, e);
     }
     this.calculate_centroid();
   }
   update_touches(t) {
-    for (const s of t) {
-      const i = this.metrics.fingers.get(s.identifier);
-      i && (i.position_delta.set(
-        s.clientX - i.position.x,
-        s.clientY - i.position.y
-      ), i.position.set(s.clientX, s.clientY));
+    for (const i of t) {
+      const e = this.metrics.fingers.get(i.identifier);
+      e && (e.position_delta.set(
+        i.clientX - e.position.x,
+        i.clientY - e.position.y
+      ), e.position.set(i.clientX, i.clientY));
     }
     this.calculate_centroid();
   }
   remove_touches(t) {
     this.metrics.finger_count -= t.length;
-    for (const s of t)
-      this.metrics.fingers.delete(s.identifier);
+    for (const i of t)
+      this.metrics.fingers.delete(i.identifier);
     this.calculate_centroid();
   }
   remove_all_touches() {
     this.metrics.finger_count = 0, this.metrics.fingers.clear(), this.metrics.centroid.set(0, 0);
   }
   calculate_centroid() {
-    const { finger_count: t, fingers: s, centroid: i } = this.metrics;
-    i.set(0, 0);
-    for (const r of s.values())
-      i.add_assign(r.position);
-    t > 1 && i.div_assign(t);
-    for (const r of s.values())
-      i.sub(r.position, r.centroid_direction);
+    const { finger_count: t, fingers: i, centroid: e } = this.metrics;
+    e.set(0, 0);
+    for (const c of i.values())
+      e.add_assign(c.position);
+    t > 1 && e.div_assign(t);
+    for (const c of i.values())
+      e.sub(c.position, c.centroid_direction);
   }
 }
-var w = /* @__PURE__ */ ((e) => (e[e.Inward = 0] = "Inward", e[e.Outward = 1] = "Outward", e))(w || {});
-const x = {
+var v = /* @__PURE__ */ ((n) => (n[n.Inward = 0] = "Inward", n[n.Outward = 1] = "Outward", n))(v || {});
+const p = {
   sensitivity: 0.5
-}, O = (e, t) => {
-  const { exact_finger_count: s, sensitivity: i = 0.5 } = t ?? x, r = !!s && e.finger_count === s || !s && e.finger_count > 1;
-  let c;
-  if (r) {
-    const a = e.fingers.values();
-    let { value: h, done: n } = a.next(), l = h.is_moving_toward_centroid(), _ = !0;
-    for (; !n && _; )
-      _ = l === h.is_moving_toward_centroid(), { value: h, done: n } = a.next();
-    if (_) {
-      const d = l ? 0 : 1;
-      let u = 0;
-      for (const g of e.fingers.values())
-        u += g.position_delta.length();
-      u /= e.finger_count, u *= i, c = { strength: u, direction: d };
+}, x = (n, t) => {
+  const { exact_finger_count: i, sensitivity: e = 0.5 } = t ?? p, c = !!i && n.finger_count === i || !i && n.finger_count > 1;
+  let u;
+  if (c) {
+    const _ = n.fingers.values();
+    let { value: s, done: o } = _.next(), l = s.is_moving_toward_centroid(), a = !0;
+    for (; !o && a; )
+      a = l === s.is_moving_toward_centroid(), { value: s, done: o } = _.next();
+    if (a) {
+      const g = l ? 0 : 1;
+      let h = 0;
+      for (const d of n.fingers.values())
+        h += d.position_delta.length();
+      h /= n.finger_count, h *= e, u = { strength: h, direction: g };
     }
   }
-  return c ? { is_recognised: !0, metrics: c } : { is_recognised: !1 };
+  return u ? { is_recognised: !0, metrics: u } : { is_recognised: !1 };
 };
 export {
-  v as EventType,
-  m as Finger,
-  p as GestureController,
-  f as Metrics,
-  w as PinchDirection,
-  o as Vector,
-  O as pinch_zoom
+  f as Finger,
+  w as GestureController,
+  m as Metrics,
+  v as PinchDirection,
+  r as Vector,
+  x as pinch_zoom
 };
 //# sourceMappingURL=gesture-me-this.es.js.map

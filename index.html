@@ -24,11 +24,7 @@
 
     <body>
         <script type="module">
-            import {
-                GestureController,
-                EventType,
-                pinch_zoom,
-            } from "./src/lib.ts";
+            import { GestureController, pinch_zoom } from "./src/lib.ts";
             import TouchEmulator from "hammer-touchemulator";
 
             TouchEmulator.template = () => "";
@@ -46,60 +42,61 @@
             context.fillStyle = "green";
             context.strokeStyle = "yellow";
 
-            const controller = new GestureController(canvas);
-            controller.add_listener(EventType.Move, (metrics) => {
-                context.clearRect(0, 0, canvas.width, canvas.height);
+            const controller = new GestureController(canvas, {
+                on_move(metrics) {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
 
-                if (metrics.centroid.x !== 0 || metrics.centroid.y !== 0) {
-                    context.beginPath();
-                    context.arc(
-                        metrics.centroid.x,
-                        metrics.centroid.y,
-                        touchBubbleRadius,
-                        0,
-                        2 * Math.PI,
-                    );
-                    context.closePath();
-                    context.fill();
-                }
+                    if (metrics.centroid.x !== 0 || metrics.centroid.y !== 0) {
+                        context.beginPath();
+                        context.arc(
+                            metrics.centroid.x,
+                            metrics.centroid.y,
+                            touchBubbleRadius,
+                            0,
+                            2 * Math.PI,
+                        );
+                        context.closePath();
+                        context.fill();
+                    }
 
-                const p = pinch_zoom(metrics);
-                if (p.is_recognised) {
-                    context.strokeStyle = "red";
-                } else {
-                    context.strokeStyle = "yellow";
-                }
+                    const p = pinch_zoom(metrics);
+                    if (p.is_recognised) {
+                        context.strokeStyle = "red";
+                    } else {
+                        context.strokeStyle = "yellow";
+                    }
 
-                for (const finger of metrics.fingers.values()) {
-                    context.beginPath();
-                    context.arc(
-                        finger.position.x,
-                        finger.position.y,
-                        touchBubbleRadius,
-                        0,
-                        2 * Math.PI,
-                    );
-                    context.closePath();
-                    context.stroke();
+                    for (const finger of metrics.fingers.values()) {
+                        context.beginPath();
+                        context.arc(
+                            finger.position.x,
+                            finger.position.y,
+                            touchBubbleRadius,
+                            0,
+                            2 * Math.PI,
+                        );
+                        context.closePath();
+                        context.stroke();
 
-                    context.beginPath();
-                    context.moveTo(finger.position.x, finger.position.y);
-                    context.lineTo(
-                        finger.position.x + finger.position_delta.x,
-                        finger.position.y + finger.position_delta.y,
-                    );
-                    context.closePath();
-                    context.stroke();
+                        context.beginPath();
+                        context.moveTo(finger.position.x, finger.position.y);
+                        context.lineTo(
+                            finger.position.x + finger.position_delta.x,
+                            finger.position.y + finger.position_delta.y,
+                        );
+                        context.closePath();
+                        context.stroke();
 
-                    context.beginPath();
-                    context.moveTo(finger.position.x, finger.position.y);
-                    context.lineTo(
-                        finger.position.x + finger.centroid_direction.x,
-                        finger.position.y + finger.centroid_direction.y,
-                    );
-                    context.closePath();
-                    context.stroke();
-                }
+                        context.beginPath();
+                        context.moveTo(finger.position.x, finger.position.y);
+                        context.lineTo(
+                            finger.position.x + finger.centroid_direction.x,
+                            finger.position.y + finger.centroid_direction.y,
+                        );
+                        context.closePath();
+                        context.stroke();
+                    }
+                },
             });
         </script>
 
