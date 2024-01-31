@@ -23,7 +23,7 @@ export class GestureController {
   private on_end: InternalTouchEventHandler;
   private on_cancel: InternalTouchEventHandler;
 
-  private constructor(
+  constructor(
     private element: HTMLElement,
     private listeners: Map<EventType, TouchHandler[]>,
   ) {
