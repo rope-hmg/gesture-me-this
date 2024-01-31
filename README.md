@@ -1,6 +1,11 @@
 # Gesture Me This
 
-A tiny multitouch gesture library (1.5kB gzip)
+A tiny multitouch gesture library for the browser.
+
+```
+dist/gesture-me-this.es.js   5.93 kB │ gzip: 1.67 kB │ map: 18.02 kB
+dist/gesture-me-this.umd.js  4.32 kB │ gzip: 1.47 kB │ map: 17.44 kB
+```
 
 # Gestures
 
@@ -12,6 +17,10 @@ Currently supports the following gestures:
 The gesture recognisers only use the public Metrics API, so you can easily create your own gestures.
 
 # Documentation
+
+If you want to use this with React, check out `react-gesture-me-this`:
+- [npm]()
+- [github](https://github.com/rope-hmg/react-gesture-me-this)
 
 ```ts
 import { GestureController, EventType, pinch_zoom } from "gesture-me-this";
