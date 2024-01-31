@@ -23,16 +23,17 @@ If you want to use this with React, check out `react-gesture-me-this`:
 - [github](https://github.com/rope-hmg/react-gesture-me-this)
 
 ```ts
-import { GestureController, EventType, pinch_zoom } from "gesture-me-this";
+import { GestureController, pinch_zoom } from "gesture-me-this";
 
 const canvas = document.getElementById("canvas");
-const controller = new GestureController(canvas);
-controller.add_listener(EventType.Move, (metrics) => {
-  const pinch = pinch_zoom(metrics);
+const controller = new GestureController(canvas, {
+  on_move(metrics) => {
+    const pinch = pinch_zoom(metrics);
 
-  if (pinch.is_recognised) {
-    console.log(pinch.strength);
-    console.log(pinch.direction);
+    if (pinch.is_recognised) {
+      console.log(pinch.metrics.strength);
+      console.log(pinch.metrics.direction);
+    }
   }
 });
 ```
